@@ -5,7 +5,7 @@ using Nancy;
 using Nancy.ViewEngines.Razor;
 using System.Collections.Generic;
 
-namespace StartupNS
+namespace CollectorNS
 {
   public class Startup
   {
@@ -37,5 +37,9 @@ namespace StartupNS
     {
       get { return false; }
     }
+  }
+  public static class DBConfiguration
+  {
+      public static string ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=things;Integrated Security=SSPI;";
   }
 }
