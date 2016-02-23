@@ -1,0 +1,14 @@
+<h1>Add a new collector</h1>
+<form action="/collectors/new" method="post">
+  <label for="collector-description">Collector description:</label>
+  <input id="collector-description" name="collector-description" type="text">
+  <select name="category-id">
+    @foreach (var category in Model)
+    {
+      <option value="@category.GetId()">@category.GetName()</option>
+    }
+  </select>
+  <button type="submit">Add new collector</button>
+</form>
+<p><a href="/">Back home</a></p>
+<p><a href="/collectors">View all collectors</a></p>

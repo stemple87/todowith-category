@@ -2,19 +2,20 @@ using System.Collections.Generic;
 using System;
 using System.Data.SqlClient;
 
-namespace CollectorNS.Objects
+namespace CollectorNS
 {
   public class Collector
   {
     private int _id;
     private string _description;
+    private int _categoryId;
 
-    public Collector(string Description, int Id = 0)
+    public Collector(string Description, int CategoryId, int Id = 0)
     {
       _id = Id;
       _description = Description;
-      if(_id == 0)
-        Save();
+      _categoryId = CategoryId;
+
     }
 
     public int GetId()
@@ -29,6 +30,15 @@ namespace CollectorNS.Objects
     {
       _description = newDescription;
     }
+    public int GetCategoryId()
+    {
+      return _categoryId;
+    }
+    public void SetCategoryId(int newCategoryId)
+    {
+      _categoryId = newCategoryId;
+    }
+
     public override bool Equals(System.Object otherCollector)
     {
       if (!(otherCollector is Collector))
@@ -40,7 +50,8 @@ namespace CollectorNS.Objects
         Collector newCollector = (Collector) otherCollector;
         bool idEquality = (this.GetId() == newCollector.GetId());
         bool descriptionEquality = (this.GetDescription() == newCollector.GetDescription());
-        return (idEquality && descriptionEquality);
+        bool categoryEquality = this.GetCategoryId() == newCollector.GetCategoryId();
+        return (idEquality && descriptionEquality && categoryEquality);
       }
     }
     public void Save()
@@ -49,13 +60,18 @@ namespace CollectorNS.Objects
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO things (description) OUTPUT INSERTED.id VALUES (@ThingsDescription);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO things (description, category_id) OUTPUT INSERTED.id VALUES (@ThingsDescription, @ThingsCategoryId);", conn);
 
       SqlParameter descriptionParameter = new SqlParameter("@ThingsDescription", this.GetDescription());
-      Console.WriteLine(descriptionParameter.Value);
-      // descriptionParameter.ParameterName = "@ThingsDescription";
-      // descriptionParameter.Value = this.GetDescription();
+      // Console.WriteLine(descriptionParameter.Value);
+      descriptionParameter.ParameterName = "@ThingsDescription";
+      descriptionParameter.Value = this.GetDescription();
+      SqlParameter categoryIdParameter = new SqlParameter();
+      categoryIdParameter.ParameterName = "@ThingsCategoryId";
+      categoryIdParameter.Value = this.GetCategoryId();
+
       cmd.Parameters.Add(descriptionParameter);
+      cmd.Parameters.Add(categoryIdParameter);
       rdr = cmd.ExecuteReader();
 
       while(rdr.Read())
@@ -86,7 +102,8 @@ namespace CollectorNS.Objects
       {
         int ThingId = rdr.GetInt32(0);
         string ThingDescription = rdr.GetString(1);
-        Collector newCollector = new Collector(ThingDescription, ThingId);
+        int ThingCategoryId = rdr.GetInt32(2);
+        Collector newCollector = new Collector(ThingDescription, ThingCategoryId, ThingId);
         allCollectors.Add(newCollector);
       }
 
@@ -116,12 +133,14 @@ namespace CollectorNS.Objects
 
       int foundCollectorId = 0;
       string foundCollectorDescription = null;
+      int foundCategoryId = 0;
       while(rdr.Read())
       {
         foundCollectorId = rdr.GetInt32(0);
         foundCollectorDescription = rdr.GetString(1);
+        foundCategoryId = rdr.GetInt32(2);
       }
-      Collector foundCollector = new Collector(foundCollectorDescription, foundCollectorId);
+      Collector foundCollector = new Collector(foundCollectorDescription, foundCategoryId, foundCollectorId);
 
       if (rdr != null)
       {

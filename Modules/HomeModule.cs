@@ -1,7 +1,6 @@
-using Nancy;
-using CollectorNS.Objects;
 using System.Collections.Generic;
-using System;
+using Nancy;
+using Nancy.ViewEngines.Razor;
 
 namespace CollectorNS
 {
@@ -10,30 +9,47 @@ namespace CollectorNS
     public HomeModule()
     {
       Get["/"] = _ => {
-        return View["index.cshtml", Collector.GetAll()];
+        List<Category> AllCategories = Category.GetAll();
+        return View["index.cshtml", AllCategories];
       };
-      Get["/{id}"] = parameters => {
-        Console.WriteLine("ID: " + parameters.id);
-        return View["viewThing.cshtml", Collector.Find(parameters.id)];
+      Get["/collectors"] = _ => {
+        List<Collector> AllCollectors = Collector.GetAll();
+        return View["collectors.cshtml", AllCollectors];
       };
-      Post["/"] = _ => {
-        Console.WriteLine("Form data: " + Request.Form["thing"]);
-        Console.WriteLine("Description: " + new Collector(Request.Form["thing"]).GetDescription());
-        return View["index.cshtml", Collector.GetAll()];
+      Get["/categories"] = _ => {
+        List<Category> AllCategories = Category.GetAll();
+        return View["categories.cshtml", AllCategories];
       };
-      Get["/delete"] = _ => {
-        return View["sure.cshtml", "/delete"];
+      Get["/categories/new"] = _ => {
+        return View["categories_form.cshtml"];
       };
-      Get["/delete/delete"] = _ => {
-        return View["sure.cshtml", "/delete/delete"];
+      Post["/categories/new"] = _ => {
+        Category newCategory = new Category(Request.Form["category-name"]);
+        newCategory.Save();
+        return View["success.cshtml"];
       };
-      Get["/delete/delete/delete"] = _ => {
-        return View["sure.cshtml", "/delete/delete/delete"];
+      Get["/collectors/new"] = _ => {
+        List<Category> AllCategories = Category.GetAll();
+        return View["collectors_form.cshtml", AllCategories];
       };
-      Get["/delete/delete/delete/delete"] = _ => {
+      Post["/collectors/new"] = _ => {
+        Collector newCollector = new Collector(Request.Form["collector-description"], Request.Form["category-id"]);
+        newCollector.Save();
+        return View["success.cshtml"];
+      };
+      Post["/collectors/delete"] = _ => {
         Collector.DeleteAll();
-        return View["index.cshtml", Collector.GetAll()];
+        return View["cleared.cshtml"];
       };
+      Get["/categories/{id}"] = parameters => {
+        Dictionary<string, object> model = new Dictionary<string, object>();
+        var SelectedCategory = Category.Find(parameters.id);
+        var CategoryCollectors = SelectedCategory.GetCollectors();
+        model.Add("category", SelectedCategory);
+        model.Add("collectors", CategoryCollectors);
+        return View["category.cshtml", model];
+      };
+
     }
   }
 }

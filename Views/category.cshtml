@@ -1,0 +1,17 @@
+<h2>Here are all the collectors in this category:</h2>
+
+@if (@Model["collectors"].Count == 0)
+{
+  <p>No collectors have been added yet!</p>
+}
+else
+{
+  <ol>
+    @foreach (var collector in @Model["collectors"])
+    {
+      <li>@collector.GetDescription()</li>
+    }
+  </ol>
+}
+<p><a href="/collectors/new">Add a new collector</a></p>
+<p><a href="/">Return to Main Page</a></p>

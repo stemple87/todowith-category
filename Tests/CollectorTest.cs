@@ -1,5 +1,4 @@
 using Xunit;
-using CollectorNS.Objects;
 using System.Collections.Generic;
 using System;
 using System.Data;
@@ -26,8 +25,8 @@ namespace CollectorNS
     public void Test_Equal_ReturnsTrueIfDescriptionsAreTheSame()
     {
       //Arrange, Act
-      Collector firstCollector = new Collector("Mow the lawn");
-      Collector secondCollector = new Collector("Mow the lawn");
+      Collector firstCollector = new Collector("Mow the lawn", 1);
+      Collector secondCollector = new Collector("Mow the lawn", 1);
 
       //Assert
       Assert.Equal(firstCollector, secondCollector);
@@ -37,7 +36,7 @@ namespace CollectorNS
     public void Test_Save_AssignsIdToObject()
     {
       //Arrange
-      Collector testCollector = new Collector("Mow the lawn");
+      Collector testCollector = new Collector("Mow the lawn", 1);
 
       //Act
       testCollector.Save();
@@ -54,7 +53,7 @@ namespace CollectorNS
     public void Test_Find_FindsCollectorInDatabase()
     {
       //Arrange
-      Collector testCollector = new Collector("Mow the lawn");
+      Collector testCollector = new Collector("Mow the lawn", 1);
       testCollector.Save();
 
       //Act

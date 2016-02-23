@@ -1,14 +1,3 @@
-@Html.Partial("header.cshtml")
-
-<ul>
-  @foreach(var item in Model) {
-    <li><a href="/@item.GetId()">@item.GetDescription()</a></li>
-  }
-</ul>
-
-<form class="" action="/" method="post">
-  <label for="thing">Thing:</label><input type="text" name="thing" value="" autofocus>
-  <input type="submit" name="submit" value="Add Thing to Collection">
-</form>
-
-<a href="/delete">Delete All</a>
+<h1>To Do List</h1>
+<h4><a href="/categories">View Categories</a></h4>
+<h4><a href="/collectors">View Collectors</a></h4>
