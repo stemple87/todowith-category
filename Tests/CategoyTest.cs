@@ -81,16 +81,15 @@ namespace CollectorNS
     }
 
     [Fact]
-    public void Test_GetCollectors_REtrievesAllCollectorsWithCategory()
+    public void Test_GetCollectors_RetrievesAllCollectorsWithCategory()
     {
       Category testCategory = new Category("Household chores");
       testCategory.Save();
 
-      DateTime dummyDate = new DateTime(2099,12,31);
-      Collector firstCollector = new Collector("Mow the lawn", testCategory.GetId(), dummyDate);
+      Collector firstCollector = new Collector("Mow the lawn", testCategory.GetId());
       firstCollector.Save();
 
-      Collector secondCollector = new Collector("Do the dishes", testCategory.GetId(), dummyDate);
+      Collector secondCollector = new Collector("Do the dishes", testCategory.GetId());
       secondCollector.Save();
 
       List<Collector> testCollectorList = new List<Collector>{firstCollector, secondCollector};

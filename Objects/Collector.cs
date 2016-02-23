@@ -9,15 +9,20 @@ namespace CollectorNS
     private int _id;
     private string _description;
     private int _categoryId;
-    private DateTime _dueDate;
+    private DateTime? _dueDate;
     // DateTime dummyDate = new DateTime(2099, 12, 31)
 
-    public Collector(string Description, int CategoryId, DateTime DueDate, int Id = 0)
+    public Collector(string Description, int CategoryId, DateTime? DueDate = null, int Id = 0)
     {
       _id = Id;
       _description = Description;
       _categoryId = CategoryId;
       _dueDate = DueDate;
+
+      if (_dueDate == null)
+      {
+        _dueDate = new DateTime(2099, 12, 31);
+      }
 
     }
 
@@ -41,11 +46,11 @@ namespace CollectorNS
     {
       _categoryId = newCategoryId;
     }
-    public DateTime GetDueDate()
+    public DateTime? GetDueDate()
     {
       return _dueDate;
     }
-    public void SetDueDate(DateTime newDueDate)
+    public void SetDueDate(DateTime? newDueDate)
     {
       _dueDate = newDueDate;
     }
