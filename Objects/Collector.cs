@@ -9,12 +9,15 @@ namespace CollectorNS
     private int _id;
     private string _description;
     private int _categoryId;
+    private DateTime _dueDate;
+    // DateTime dummyDate = new DateTime(2099, 12, 31)
 
-    public Collector(string Description, int CategoryId, int Id = 0)
+    public Collector(string Description, int CategoryId, DateTime DueDate, int Id = 0)
     {
       _id = Id;
       _description = Description;
       _categoryId = CategoryId;
+      _dueDate = DueDate;
 
     }
 
@@ -38,6 +41,14 @@ namespace CollectorNS
     {
       _categoryId = newCategoryId;
     }
+    public DateTime GetDueDate()
+    {
+      return _dueDate;
+    }
+    public void SetDueDate(DateTime newDueDate)
+    {
+      _dueDate = newDueDate;
+    }
 
     public override bool Equals(System.Object otherCollector)
     {
@@ -50,6 +61,7 @@ namespace CollectorNS
         Collector newCollector = (Collector) otherCollector;
         bool idEquality = (this.GetId() == newCollector.GetId());
         bool descriptionEquality = (this.GetDescription() == newCollector.GetDescription());
+        bool dateTimeEquality = (this.GetDueDate() == newCollector.GetDueDate());
         bool categoryEquality = this.GetCategoryId() == newCollector.GetCategoryId();
         return (idEquality && descriptionEquality && categoryEquality);
       }
@@ -60,18 +72,23 @@ namespace CollectorNS
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO things (description, category_id) OUTPUT INSERTED.id VALUES (@ThingsDescription, @ThingsCategoryId);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO things (description, due_date, category_id) OUTPUT INSERTED.id VALUES (@ThingsDescription, @ThingsDueDate, @ThingsCategoryId);", conn);
 
       SqlParameter descriptionParameter = new SqlParameter("@ThingsDescription", this.GetDescription());
-      // Console.WriteLine(descriptionParameter.Value);
       descriptionParameter.ParameterName = "@ThingsDescription";
       descriptionParameter.Value = this.GetDescription();
+
+      SqlParameter dueDateParameter = new SqlParameter("@ThingsDueDate", this.GetDueDate());
+      dueDateParameter.ParameterName = "@ThingsDueDate";
+      dueDateParameter.Value = this.GetDueDate();
+
       SqlParameter categoryIdParameter = new SqlParameter();
       categoryIdParameter.ParameterName = "@ThingsCategoryId";
       categoryIdParameter.Value = this.GetCategoryId();
 
       cmd.Parameters.Add(descriptionParameter);
       cmd.Parameters.Add(categoryIdParameter);
+      cmd.Parameters.Add(dueDateParameter);
       rdr = cmd.ExecuteReader();
 
       while(rdr.Read())
@@ -102,8 +119,9 @@ namespace CollectorNS
       {
         int ThingId = rdr.GetInt32(0);
         string ThingDescription = rdr.GetString(1);
-        int ThingCategoryId = rdr.GetInt32(2);
-        Collector newCollector = new Collector(ThingDescription, ThingCategoryId, ThingId);
+        DateTime ThingDateTime = rdr.GetDateTime(2);
+        int ThingCategoryId = rdr.GetInt32(3);
+        Collector newCollector = new Collector(ThingDescription, ThingCategoryId, ThingDateTime, ThingId);
         allCollectors.Add(newCollector);
       }
 
@@ -133,14 +151,16 @@ namespace CollectorNS
 
       int foundCollectorId = 0;
       string foundCollectorDescription = null;
+      DateTime foundCollectorDateTime = new DateTime(2099, 12, 31);
       int foundCategoryId = 0;
       while(rdr.Read())
       {
         foundCollectorId = rdr.GetInt32(0);
         foundCollectorDescription = rdr.GetString(1);
-        foundCategoryId = rdr.GetInt32(2);
+        foundCollectorDateTime = rdr.GetDateTime(2);
+        foundCategoryId = rdr.GetInt32(3);
       }
-      Collector foundCollector = new Collector(foundCollectorDescription, foundCategoryId, foundCollectorId);
+      Collector foundCollector = new Collector(foundCollectorDescription, foundCategoryId, foundCollectorDateTime, foundCollectorId);
 
       if (rdr != null)
       {

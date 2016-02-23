@@ -25,8 +25,9 @@ namespace CollectorNS
     public void Test_Equal_ReturnsTrueIfDescriptionsAreTheSame()
     {
       //Arrange, Act
-      Collector firstCollector = new Collector("Mow the lawn", 1);
-      Collector secondCollector = new Collector("Mow the lawn", 1);
+      DateTime dummyDate = new DateTime(2016, 1, 1);
+      Collector firstCollector = new Collector("Mow the lawn", 1, dummyDate);
+      Collector secondCollector = new Collector("Mow the lawn", 1, dummyDate);
 
       //Assert
       Assert.Equal(firstCollector, secondCollector);
@@ -36,7 +37,8 @@ namespace CollectorNS
     public void Test_Save_AssignsIdToObject()
     {
       //Arrange
-      Collector testCollector = new Collector("Mow the lawn", 1);
+      DateTime dummyDate = new DateTime(2016, 1, 1);
+      Collector testCollector = new Collector("Mow the lawn", 1, dummyDate);
 
       //Act
       testCollector.Save();
@@ -53,7 +55,8 @@ namespace CollectorNS
     public void Test_Find_FindsCollectorInDatabase()
     {
       //Arrange
-      Collector testCollector = new Collector("Mow the lawn", 1);
+      DateTime dummyDate = new DateTime(2016, 1, 1);
+      Collector testCollector = new Collector("Mow the lawn", 1, dummyDate);
       testCollector.Save();
 
       //Act

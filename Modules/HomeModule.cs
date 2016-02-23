@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Nancy;
 using Nancy.ViewEngines.Razor;
+using System;
 
 namespace CollectorNS
 {
@@ -33,7 +34,8 @@ namespace CollectorNS
         return View["collectors_form.cshtml", AllCategories];
       };
       Post["/collectors/new"] = _ => {
-        Collector newCollector = new Collector(Request.Form["collector-description"], Request.Form["category-id"]);
+        DateTime dummyDate = new DateTime(2099, 12, 31);
+        Collector newCollector = new Collector(Request.Form["collector-description"], Request.Form["category-id"], dummyDate);
         newCollector.Save();
         return View["success.cshtml"];
       };

@@ -161,8 +161,9 @@ namespace CollectorNS
       {
         int collectorId = rdr.GetInt32(0);
         string collectorDescription = rdr.GetString(1);
-        int collectorCategoryId = rdr.GetInt32(2);
-        Collector newCollector = new Collector(collectorDescription, collectorCategoryId, collectorId);
+        DateTime collectorDateTime = rdr.GetDateTime(2);
+        int collectorCategoryId = rdr.GetInt32(3);
+        Collector newCollector = new Collector(collectorDescription, collectorCategoryId, collectorDateTime, collectorId);
         collectors.Add(newCollector);
       }
       if (rdr != null)

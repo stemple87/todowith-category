@@ -86,10 +86,11 @@ namespace CollectorNS
       Category testCategory = new Category("Household chores");
       testCategory.Save();
 
-      Collector firstCollector = new Collector("Mow the lawn", testCategory.GetId());
+      DateTime dummyDate = new DateTime(2099,12,31);
+      Collector firstCollector = new Collector("Mow the lawn", testCategory.GetId(), dummyDate);
       firstCollector.Save();
 
-      Collector secondCollector = new Collector("Do the dishes", testCategory.GetId());
+      Collector secondCollector = new Collector("Do the dishes", testCategory.GetId(), dummyDate);
       secondCollector.Save();
 
       List<Collector> testCollectorList = new List<Collector>{firstCollector, secondCollector};
