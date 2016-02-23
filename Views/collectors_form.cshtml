@@ -2,6 +2,12 @@
 <form action="/collectors/new" method="post">
   <label for="collector-description">Collector description:</label>
   <input id="collector-description" name="collector-description" type="text">
+  <label for="new-year">Enter year:</label>
+  <input id="new-year" name="new-year" type="text">
+  <label for="new-month">Enter month:</label>
+  <input id="new-month" name="new-month" type="text">
+  <label for="new-day">Enter day:</label>
+  <input id="new-day" name="new-day" type="text">
   <select name="category-id">
     @foreach (var category in Model)
     {

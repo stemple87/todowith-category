@@ -34,8 +34,8 @@ namespace CollectorNS
         return View["collectors_form.cshtml", AllCategories];
       };
       Post["/collectors/new"] = _ => {
-        DateTime dummyDate = new DateTime(2099, 12, 31);
-        Collector newCollector = new Collector(Request.Form["collector-description"], Request.Form["category-id"], dummyDate);
+        DateTime newDate = new DateTime(Request.Form["new-year"], Request.Form["new-month"], Request.Form["new-day"]);
+        Collector newCollector = new Collector(Request.Form["collector-description"], Request.Form["category-id"], newDate);
         newCollector.Save();
         return View["success.cshtml"];
       };
